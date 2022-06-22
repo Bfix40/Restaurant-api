@@ -15,27 +15,20 @@ var _roles = require("./roles");
 var _users = require("./users");
 var _vehicles = require("./vehicles");
 
-
 const Sequelize = require('sequelize');
 require('dotenv').config()
 const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config');
-const configObj = config[env];
+
+const configObj = config[env]
 
 let sequelize;
 if (config.use_env_variable) {
-    sequelize = new Sequelize(
-        process.env[configObj.use_env_variable],
-        configObj
-    );
+  sequelize = new Sequelize(process.env[configObj.use_env_variable], configObj);
 } else {
-    sequelize = new Sequelize(
-        configObj.database,
-        configObj.username,
-        configObj.password,
-        configObj
-    );
+  sequelize = new Sequelize(configObj.database, configObj.username, configObj.password, configObj);
 }
+
 
 
 function initModels() {

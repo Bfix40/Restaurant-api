@@ -1,34 +1,33 @@
-//? DEPENCIES
+//? Dependencies
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
-
-//? IMPORT FILES
+//? Import files
 const config = require('./config')
-const userRoutes = require('./users/user.routes').router
+const userRouter = require('./users/users.routes').router
 
-//! INITIAL CONFIGURATION
+
+//? Initial configuration
 const app = express()
 
-
+// Enable incoming JSON data
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(cors)
-if (config.node_env === 'development') {
-    app.use(morgan('dev'))
-} else {
-    app.use(morgan('combined'))
+app.use(express.urlencoded({extended: true}))
+
+app.use(cors())
+
+if(config.nodeEnv === 'development'){
+    app.use(morgan("dev"))
+}else {
+    app.use(morgan("combined"))
 }
 
-//*ROUTES
-app.get('/', (req, res) => {
-    res.status(200).json({message: 'Funciona'})
-})
-// app.use('/api/v1/users', userRoutes);
-// app.use('/api/v1/auth')
+//* Routes
+app.use("/api/v1/users", userRouter)
+//app.use("/api/v1/auth")
 
 app.listen(config.port, () => {
-    console.log(`Sever has started in port ${config.port}`)
+    console.log(`Server started at port ${config.port}`)
 })
 
 module.exports = {

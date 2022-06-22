@@ -1,7 +1,8 @@
-require('dotenv').config()
+require('dotenv').config();
 
 module.exports = {
-    port: process.env.PORT || 5000,
-    node_env: process.env.NODE_ENV || 'development',
+    port : process.env.PORT || 8000,
+    nodeEnv : process.env.NODE_ENV || 'development',
     jwtSecret: process.env.JWT_SECRET
-};
+}
+

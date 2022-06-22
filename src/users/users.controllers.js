@@ -1,68 +1,63 @@
-//!DEPENDENCIAS
-const  uuid = require('uuid')
-const crypto = require('../utils/crypto')
-const users = require('../models/init-models').initModels().users
+const crypto = require('../tools/crypt');
+const uuid = require('uuid');
+const users = require('../database/models/init-models').initModels().users;
 
-
-//CUALQUIER USUARIO
+//Cualquier usuario
 const registerUser = async (data) => {
+    // todo: La contraseña tiene que estar encriptada con bcrypt
     const hashedPassword = crypto.hashPassword(data.password);
-    const user_id = uuid.v4();
+    const userId = uuid.v4();
     const newUser = await users.create({
-        uuid: user_id,
+        uuid: userId,
         ...data,
         password: hashedPassword,
         role_id: 1
-    });
+    })
+
     return {
-        message: `User created succesfully with the id: ${user_id}`,
+        message: `User created succesfully with the id: ${userId}`,
         user: newUser,
     };
-};
+}
 
-// SOLO LOS ADMINS
-const getAllUsers = async () => {
+//Solo administradores
+const getAllUsers = async() => {
     const users = await users.findAll({
-        attributes: {
+        attributes : {
             exclude: ["password"]
         }
     })
     return users
 }
 
-// SOLO LOS ADMINS
-const getUserById = async (id) => {
-    const user = await users.findByPk(id,
-            {attributes: {
+//Solo administradores
+const getUserById = async(id) => {
+    const user = await users.findByPk(id, {
+        attributes : {
             exclude: ["password"]
-        }})
-    
+        }
+    })
     return user
 }
 
-// CLIENTES Y ADMINISTRADORES
+//clientes y administradores
+const deleteUser = async(id) => {
+    try {
+        const user = await users.destroy({
+            where: {
+                id
+            }
+        })
+        return {
+            message: `User with id: ${id} deleted succesfully.`,
+            user
+        }
+    } catch (error) {
+        return error
+    }
+}
 
-const deleteUser = async (id) => {
-    const user = await users.destroy({
-        where: {
-            id,
-        },
-    });
-    return {
-        message: `User with id: ${id} deleted succesfully.`,
-        user,
-    };
-};
-
-//!FORMA ANTERIOR
-// const deleteUser = async (id) => {
-//     const index = await models.users.findIndex((item) => item.id === id);
-//     models.users.splice(index, 1);
-//     return;
-// } 
-
-// CUALQUIER ROL
-
+// cualquier rol
 const editUser = async (id, data) => {
     const user = await users.update(data,{
         where: {
@@ -75,36 +70,10 @@ const editUser = async (id, data) => {
     }
 }
 
-//!FORMA ANTERIOR
-// const editUser = (id, data) => {
-//     const index = models.users.findIndex((item) => item.id === id);
-//     if (index !== -1) {
-//         models.users[index] = {
-//             id,
-//             ...data,
-//             password: data.password,
-//             active: data.active,
-//         };
-//     } else {
-//         registerUser(data);
-//     }
-//     return;
-// }
-
 module.exports = {
     registerUser,
     getAllUsers,
     getUserById,
     deleteUser,
     editUser
-};
-// await modeloEquipo.update({
-// body_a_actualizar:asdasdasd}, {
-//     where: {
-//         id: id,
-//     }
-// });
-/*models.User.destroy({
-  where: {id}
- })
- */
+}

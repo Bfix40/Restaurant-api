@@ -1,21 +1,37 @@
-const userControllers = require('./users.controllers')
-// const { toPromise } = require('../utils/toPromise');
+const usersControllers = require('./users.controllers')
+
+// todo:
+//? get /users ADMIN
+//? get /users/:id ADMIN
+//? delete /users/me CLIENTE
+//? delete /users/:id ADMIN
+//? put-patch /users/me CLIENTE USUARIO
+//? put-patch /users/:id ADMIN
+
+// /auth/login
+// /auth/signin
+// /auth/reset-password
+// /auth/reset-token
+// /auth/verify-account
+
 const getAllUsers = async (req, res) => {
-    if (req.user.rol) {
+
+    if(!req.user.rol ){
         res.status(401).json({
             status: 401,
-            message: `You dont have clerance`
+            message: 'You don`t have clearance to make this request'
         })
     }
-    if (req.user.rol !== 'admin') {
+    if(req.user.rol !== 'admin'){
         res.status(401).json({
             status: 401,
-            message: `You dont have clerance`,
-        });
+            message: 'You don`t have clearance to make this request'
+        })
     }
-    const user = await (userControllers.getAllUsers());
-    res.status(200).json(user);
+    const users = await usersControllers.getAllUsers()
+    res.status(200).json(users)
 }
+
 
 module.exports = {
     getAllUsers
