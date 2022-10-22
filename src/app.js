@@ -12,7 +12,7 @@ const config = require('./config');
 const { transporter } = require('./utils/email');
 const userRoutes = require('./users/user.routes').router
 const customerRoutes = require('./customers/customer.routes').router
-//const authRoutes = require('./auth/auth.routes').router
+const authRoutes = require('./auth/auth.routes').router
 
 //! INITIAL CONFIGURATION
 const app = express()
@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
     res.status(200).json({message: 'Funciona'})
 })
 app.use('/api/v1/users', userRoutes);
-//app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/customer', customerRoutes);
 app.use('/docs', swagger.serve, swagger.setup(swaggerDocument));
 app.get('/email', (req, res) => {
