@@ -13,7 +13,7 @@ const addUser = async (req, res) => {
     const [user, err] = await toPromise(userControllers.registerUser(req.body))
     if (err || !req.body) {
         console.log("este es mi error", err)
-        res.status(400).json({ message: 'Data Missing' });
+       return res.status(400).json({ message: 'Data Missing' });
     }
     return res.status(201).json(user)
 }
