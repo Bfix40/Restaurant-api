@@ -15,7 +15,7 @@ const addUser = async (req, res) => {
         console.log("este es mi error", err)
         res.status(400).json({ message: 'Data Missing' });
     }
-    res.status(201).json(user)
+    return res.status(201).json(user)
 }
 
 const generateVerifyToken = (req, res) => {
